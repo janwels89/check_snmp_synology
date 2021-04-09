@@ -102,7 +102,8 @@ usage()
         echo "usage: ./check_snmp_synology [OPTIONS] -u [user] -p [pass] -h [hostname]"
         echo "options:"
         echo "            -u [snmp username]   	Username for SNMPv3"
-        echo "            -p [snmp password]   	Password for SNMPv3"
+        echo "            -A [snmp privacy-password]   	Password for SNMPv3"
+        echo "            -X [snmp authentification-password]   	Password for SNMPv3"
         echo "	    	  -l [level]            Set security level (noAuthNoPriv|authNoPriv|authPriv) (default ${SNMPAuth})"
 	    echo "  		  -a [protocol]		Set authentication protocol (MD5|SHA) (default ${SNMPAuthProt})"
 	    echo "		      -x [protocol]		Set privacy protocol (DES|AES) (default ${SNMPPrivProt})"
@@ -132,11 +133,12 @@ if [ "$1" == "--help" ]; then
     usage; exit 0
 fi
 
-while getopts l:a:x:2:W:C:w:c:u:p:h:t:iU OPTNAME; do
+while getopts X:l:a:x:2:W:C:w:c:u:A:h:t:iU OPTNAME; do
         case "$OPTNAME" in
 	u)	SNMPUser="$OPTARG";;
-        p)	SNMPPassword="$OPTARG";;
+        A)	SNMPPassword="$OPTARG";;
         l)	SNMPAuth="$OPTARG";;
+        X)  SNMPAuthPass="$OPTARG";;
 	    a)	SNMPAuthProt="$OPTARG";;
 	    x)	SNMPPrivProt="$OPTARG";;
         h)	hostname="$OPTARG";;
@@ -189,7 +191,11 @@ else
     if [ "$SNMPVersion" = "2" ] ; then
 	SNMPArgs=" -OQne -v 2c -c $SNMPV2Community -t $SNMPTimeout"
     else
+<<<<<<< HEAD
 	SNMPArgs=" -OQne -v 3 -u $SNMPUser -A $SNMPPassword -x ${SNMPPrivProt} -X $SNMPPassword -l ${SNMPAuth} -a ${SNMPAuthProt} -t $SNMPTimeout"
+=======
+	SNMPArgs=" -OQne -v 3 -u $SNMPUser -A $SNMPPassword -x ${SNMPPrivProt} -X $SNMPAuthPass -l ${SNMPAuth} -a ${SNMPAuthProt} -t $SNMPTimeout"
+>>>>>>> 5d849a9... Add option to set auth and encrytion password.
 	if [ ${#SNMPPassword} -lt "8" ] ; then
 	    echo "snmpwalk:  (The supplied password is too short.)"
 	    exit 1
