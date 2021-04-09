@@ -98,6 +98,7 @@ apply Service "temperature"{
 }
 
 ```
+```
 template Service "by-snmp" {
 	import "global-service"
 	check_command = "check_snmp"
